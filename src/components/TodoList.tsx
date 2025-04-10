@@ -28,7 +28,6 @@ export default function TodoList() {
   };
 
   const removeTask = (index: number) => {
-    console.log(index)
     setTasks(tasks.filter((_, i) => i !== index));
   };
 

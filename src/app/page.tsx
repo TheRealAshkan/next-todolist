@@ -2,7 +2,6 @@ import TodoList from "@/components/TodoList";
 import {
   Card,
   CardContent,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -18,9 +17,6 @@ export default function Home() {
         <CardContent>
           <TodoList />
         </CardContent>
-        <CardFooter>
-          <p>Card Footer</p>
-        </CardFooter>
       </Card>
     </div>
   );
