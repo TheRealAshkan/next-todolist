@@ -6,10 +6,13 @@ import { DndContext, closestCenter } from '@dnd-kit/core';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { Button } from './ui/button';
 import TodoItem from './TodoItem';
-
+type Tasks = {
+  text: string,
+  status: boolean
+}
 export default function TodoList() {
   const [task, setTask] = useState('');
-  const [tasks, setTasks] = useState<string[]>([]);
+  const [tasks, setTasks] = useState<Tasks[]>([]);
 
   useEffect(() => {
     const stored = localStorage.getItem('tasks');
@@ -22,9 +25,30 @@ export default function TodoList() {
 
   const addTask = () => {
     if (task.trim()) {
-      setTasks([...tasks, task]);
+      setTasks([...tasks, {text:task, status:false}]);
       setTask('');
     }
+  };
+
+  const editTask = (text:string, index:number) => {
+    if (text.trim()) {
+      tasks.map((_, i) => {
+        if(i == index) {
+          tasks[i].text = text;
+        }
+      })
+      setTasks([...tasks]);
+    }
+  };
+
+  const updateStatus = (checked:boolean, index: number) => {
+    tasks.map((_, i) => {
+      if(i == index) {
+        tasks[i].status = checked;
+      }
+    })
+    setTasks([...tasks]);
+
   };
 
   const removeTask = (index: number) => {
@@ -56,7 +80,7 @@ export default function TodoList() {
         <SortableContext items={tasks.map((_, i) => i.toString())} strategy={verticalListSortingStrategy}>
           <div className="space-y-2">
             {tasks.map((t, i) => (
-              <TodoItem key={i} id={i.toString()} index={i} text={t} onRemove={removeTask} />
+              <TodoItem key={i} id={i.toString()} index={i} text={t.text} status={t.status} editTask={editTask} onRemove={removeTask} updateStatus={updateStatus} />
             ))}
           </div>
         </SortableContext>
